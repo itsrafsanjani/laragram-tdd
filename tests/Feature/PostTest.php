@@ -32,17 +32,56 @@ class PostTest extends TestCase
                 'data' => [
                     'id' => $post->id,
                     'user' => [
-                        'data' => [
-                            'name' => $user->name,
-                            'email' => $user->email,
-                        ],
+                        'name' => $user->name,
+                        'email' => $user->email,
                     ],
                     'caption' => 'Hello World',
                     'location' => 'Dhaka - 1216, Bangladesh',
-                ],
-                'links' => [
-                    'self' => route('posts.show', $post),
+                    'links' => [
+                        'self' => route('posts.show', $post),
+                    ]
                 ]
             ]);
+    }
+
+    public function test_a_user_can_retrieve_posts()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'api');
+
+        $posts = Post::factory(2)->create(['user_id' => $user->id]);
+
+        $response = $this->get('/api/posts');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    [
+                        'id' => $posts->first()->id,
+                        'user' => [
+                            'name' => $user->name,
+                            'email' => $user->email,
+                        ],
+                        'caption' => $posts->first()->caption,
+                        'location' => $posts->first()->location,
+                    ],
+                    [
+                        'id' => $posts->last()->id,
+                        'user' => [
+                            'name' => $user->name,
+                            'email' => $user->email,
+                        ],
+                        'caption' => $posts->last()->caption,
+                        'location' => $posts->last()->location,
+                    ]
+                ],
+                'links' => [
+                    'self' => route('posts.index')
+                ]
+            ]);
+
     }
 }
