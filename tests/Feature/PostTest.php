@@ -31,7 +31,12 @@ class PostTest extends TestCase
             ->assertJson([
                 'data' => [
                     'id' => $post->id,
-                    'user_id' => $post->user_id,
+                    'user' => [
+                        'data' => [
+                            'name' => $user->name,
+                            'email' => $user->email,
+                        ],
+                    ],
                     'caption' => 'Hello World',
                     'location' => 'Dhaka - 1216, Bangladesh',
                 ],

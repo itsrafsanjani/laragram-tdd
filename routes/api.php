@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['namespace' => 'App\Http\Controllers\API\V1', 'middleware' => 'auth:api'], function () {
     Route::apiResources([
-        '/posts' => 'PostController'
+        '/posts' => 'PostController',
+        '/users' => 'UserController',
     ]);
 });
