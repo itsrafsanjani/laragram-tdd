@@ -60,15 +60,6 @@ class PostTest extends TestCase
             ->assertJson([
                 'data' => [
                     [
-                        'id' => $posts->first()->id,
-                        'user' => [
-                            'name' => $user->name,
-                            'email' => $user->email,
-                        ],
-                        'caption' => $posts->first()->caption,
-                        'location' => $posts->first()->location,
-                    ],
-                    [
                         'id' => $posts->last()->id,
                         'user' => [
                             'name' => $user->name,
@@ -76,6 +67,15 @@ class PostTest extends TestCase
                         ],
                         'caption' => $posts->last()->caption,
                         'location' => $posts->last()->location,
+                    ],
+                    [
+                        'id' => $posts->first()->id,
+                        'user' => [
+                            'name' => $user->name,
+                            'email' => $user->email,
+                        ],
+                        'caption' => $posts->first()->caption,
+                        'location' => $posts->first()->location,
                     ]
                 ],
                 'links' => [
@@ -83,5 +83,26 @@ class PostTest extends TestCase
                 ]
             ]);
 
+    }
+
+    public function test_a_user_can_only_retrieve_their_posts()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'api');
+
+        $posts = Post::factory()->create();
+
+        $response = $this->get('/api/posts');
+
+        $response->assertStatus(200)
+            ->assertExactJson([
+                'data' => [],
+                'links' => [
+                    'self' => route('posts.index')
+                ]
+            ]);
     }
 }
