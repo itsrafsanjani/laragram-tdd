@@ -37,6 +37,7 @@ class PostTest extends TestCase
                     ],
                     'caption' => 'Hello World',
                     'location' => 'Dhaka - 1216, Bangladesh',
+                    'created_at' => $post->created_at->toISOString(),
                     'links' => [
                         'self' => route('posts.show', $post),
                     ]
@@ -67,6 +68,7 @@ class PostTest extends TestCase
                         ],
                         'caption' => $posts->last()->caption,
                         'location' => $posts->last()->location,
+                        'created_at' => $posts->last()->created_at->toISOString(),
                     ],
                     [
                         'id' => $posts->first()->id,
@@ -76,6 +78,7 @@ class PostTest extends TestCase
                         ],
                         'caption' => $posts->first()->caption,
                         'location' => $posts->first()->location,
+                        'created_at' => $posts->first()->created_at->toISOString(),
                     ]
                 ],
                 'links' => [

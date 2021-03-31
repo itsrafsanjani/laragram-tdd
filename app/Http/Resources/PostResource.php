@@ -19,6 +19,7 @@ class PostResource extends JsonResource
             'user' => new UserResource($this->user),
             'caption' => $this->caption,
             'location' => $this->location,
+            'created_at' => $this->created_at,
             'links' => [
                 'self' => route('posts.show', $this),
             ]
